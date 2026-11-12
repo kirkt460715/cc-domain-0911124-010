@@ -11,6 +11,7 @@ def main(argv=None):
     parser.add_argument("--db", default="receivables.sqlite3")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("demo")
+    sub.add_parser("clearing-demo")
     execute = sub.add_parser("run")
     execute.add_argument("request")
     verify = sub.add_parser("verify")
@@ -19,6 +20,10 @@ def main(argv=None):
     try:
         if arguments.command == "demo":
             result = run()
+        elif arguments.command == "clearing-demo":
+            from .clearing_demo import run as run_clearing
+
+            result = run_clearing()
         elif arguments.command == "verify":
             from .reporting.statements import Statements
 

@@ -13,6 +13,7 @@ from .primitives import obj, error
 from .importers.inbox import Inbox
 from .importers.profiles import ImportProfiles
 from .matching.subsets import SubsetMatcher
+from .matching.clearing import BatchClearing
 from .reporting.confirmation import Confirmations
 from .reporting.delivery import JournalDelivery
 from .reporting.trace import Trace
@@ -34,6 +35,7 @@ class Workbench:
         self.inbox = Inbox(self.db, self.documents)
         self.profiles = ImportProfiles(self.db, self.documents, self.bank)
         self.subsets = SubsetMatcher(self.db, self.ledger)
+        self.clearing = BatchClearing(self.db, self.ledger)
         self.confirmations = Confirmations(self.db, self.ledger, self.aging)
         self.delivery = JournalDelivery(self.db)
         self.trace = Trace(self.db, self.ledger)
@@ -100,6 +102,11 @@ class Workbench:
             ("inbox", self.inbox, ["stage", "get", "inspect", "approve", "commit", "reject", "pending"]),
             ("profile", self.profiles, ["save", "get", "preview", "apply"]),
             ("subset", self.subsets, ["search", "propose"]),
+            ("clearing", self.clearing, [
+                "weight_save", "weight_get", "weight_defaults", "propose", "get",
+                "revisions", "failures", "recompute", "lock", "unlock", "locks",
+                "edge_impact", "confirm",
+            ]),
             ("confirmation", self.confirmations, ["submit", "get", "reconcile", "decide", "close"]),
             ("delivery", self.delivery, ["register", "status", "lease", "release", "prepare", "get", "resume", "acknowledge", "verify_checkpoint", "envelope", "verify_envelope"]),
         ]:

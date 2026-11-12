@@ -3,3 +3,4 @@ set -eu
 python3 -m compileall -q receivables
 python3 -m unittest discover -s tests -v
 python3 -m receivables demo
+python3 -m receivables clearing-demo
